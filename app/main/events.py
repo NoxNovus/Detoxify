@@ -1,5 +1,7 @@
 from flask import session
 from flask_socketio import emit, join_room, leave_room
+
+from app.moderator.simple_filter import censor_target_words, DEFAULT_SWEAR_WORDS
 from .. import socketio
 
 
@@ -17,7 +19,13 @@ def text(message):
     """Sent by a client when the user entered a new message.
     The message is sent to all people in the room."""
     room = session.get('room')
-    emit('message', {'msg': session.get('name') + ':' + message['msg']}, room=room)
+
+    raw_msg = message['msg']
+
+    # Apply moderation
+    moderated_msg = censor_target_words(raw_msg, DEFAULT_SWEAR_WORDS)
+
+    emit('message', {'msg': session.get('name') + ':' + moderated_msg}, room=room)
 
 
 @socketio.on('left', namespace='/chat')
@@ -27,4 +35,3 @@ def left(message):
     room = session.get('room')
     leave_room(room)
     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
-
