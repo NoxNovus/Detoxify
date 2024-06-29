@@ -61,5 +61,7 @@ def init_LLMchain():
 
 
 def LLM_moderate(msg):
+    if chain is None:
+        return "Moderation is not yet ready, please wait."
     result = chain.invoke(msg)
     return result
