@@ -78,4 +78,4 @@ def LLM_moderate(msg):
     if ('not' not in toxicity):
         return "This message has been flagged for toxicity."
 
-    return toxicity
+    return msg
