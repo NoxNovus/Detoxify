@@ -1,6 +1,4 @@
 .env
 *.pyc
 *.pyo
-app/__pycache__/*
-app/main/__pycache__/*
-app/moderator/__pycache__/*
+**/__pycache__/
