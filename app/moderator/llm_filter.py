@@ -75,7 +75,7 @@ def LLM_moderate(msg):
 
     result = chain.invoke(msg)
     toxicity = re.split(r'\n', result, maxsplit=1)[0]
-    if (toxicity == 'toxic'):
+    if ('not' not in toxicity):
         return "This message has been flagged for toxicity."
 
-    return result
+    return toxicity
