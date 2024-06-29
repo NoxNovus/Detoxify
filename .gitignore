@@ -1,2 +1,5 @@
-__pycache__/*
-main/__pycache__/*
+.env
+*.pyc
+*.pyo
+app/main/__pycache__/*
+app/moderator/__pycache__/*
