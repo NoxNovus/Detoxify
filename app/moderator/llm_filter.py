@@ -12,10 +12,10 @@ def init_LLMchain():
     from langchain_community.embeddings import HuggingFaceEmbeddings
     from langchain.vectorstores import FAISS
 
-    files = os.listdir("../game_data")
+    files = os.listdir("game_data")
     file_texts = []
     for file in files:
-        with open(f"../game_data/{file}") as f:
+        with open(f"game_data/{file}") as f:
             file_text = f.read()
         text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
             chunk_size=512, chunk_overlap=64,

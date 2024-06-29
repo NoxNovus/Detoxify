@@ -1,6 +1,5 @@
 from flask import jsonify, session, redirect, url_for, render_template, request
 
-from app.moderator.llm_filter import LLMChain
 from . import main
 from .forms import LoginForm
 
