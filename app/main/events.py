@@ -1,10 +1,8 @@
 from flask import session
 from flask_socketio import emit, join_room, leave_room
-from app.moderator.llm_filter import LLMChain
+from app.moderator.llm_filter import LLM_moderate
 from app.moderator.simple_filter import censor_target_words, DEFAULT_SWEAR_WORDS
 from .. import socketio
-
-llm_chain = LLMChain()
 
 MAX_USERNAME_LENGTH = 32
 users = {}  # Dictionary to track users in rooms
@@ -34,7 +32,7 @@ def joined(message):
 def text(message):
     room = session.get('room')
     raw_msg = message['msg']
-    moderated_msg = llm_chain.LLM_moderate(raw_msg)
+    moderated_msg = LLM_moderate(raw_msg)
     emit('message', {'user': session.get('name'), 'msg': moderated_msg}, room=room)
 
 @socketio.on('left', namespace='/chat')
