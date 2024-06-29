@@ -5,5 +5,4 @@ llm_chain = LLMChain()
 app = create_app(debug=True)
 
 if __name__ == '__main__':
-    llm_chain.init_LLMchain()
     socketio.run(app)

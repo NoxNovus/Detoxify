@@ -6,10 +6,6 @@ OCTOAI_API_TOKEN = os.environ["OCTOAI_API_TOKEN"]
 
 class LLMChain:
     def __init__(self):
-        self.chain = None
-
-
-    def init_LLMchain(self):
         from langchain.text_splitter import CharacterTextSplitter
         from langchain.schema import Document
         from langchain_community.embeddings import HuggingFaceEmbeddings
