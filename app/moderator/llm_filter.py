@@ -1,3 +1,4 @@
+import re
 from dotenv import load_dotenv
 import os
 
@@ -67,5 +68,10 @@ def LLM_moderate(msg):
     global chain  # Access the global variable `chain`
     if chain is None:
         return "Moderation is not yet ready, please wait."
+
     result = chain.invoke(msg)
+    toxicity = re.split(r'\n', result, maxsplit=1)[0]
+    if (toxicity == 'toxic'):
+        return "This message has been flagged for toxicity."
+
     return result
