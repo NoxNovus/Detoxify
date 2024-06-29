@@ -23,6 +23,7 @@ click==8.1.7
 Cython==0.29.37
 dataclasses-json==0.6.7
 Deprecated==1.2.14
+distro==1.9.0
 dnspython==2.6.1
 email_validator==2.2.0
 exceptiongroup==1.2.1
@@ -84,6 +85,7 @@ nvidia-nccl-cu12==2.20.5
 nvidia-nvjitlink-cu12==12.5.40
 nvidia-nvtx-cu12==12.1.105
 octoai-sdk==0.10.1
+openai==1.35.7
 openinference-instrumentation==0.1.7
 openinference-instrumentation-langchain==0.1.20
 openinference-instrumentation-llama-index==2.0.0
