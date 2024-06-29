@@ -4,9 +4,12 @@ import os
 load_dotenv()
 OCTOAI_API_TOKEN = os.environ["OCTOAI_API_TOKEN"]
 
-chain = None # Set to none by default until init
+chain = None  # Set to None by default until init
+
 
 def init_LLMchain():
+    global chain  # Access the global variable `chain`
+
     from langchain.text_splitter import CharacterTextSplitter
     from langchain.schema import Document
     from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -23,7 +26,7 @@ def init_LLMchain():
         texts = text_splitter.split_text(file_text)
         for i, chunked_text in enumerate(texts):
             file_texts.append(Document(page_content=chunked_text,
-                    metadata={"doc_title": file.split(".")[0], "chunk_num": i}))
+                                       metadata={"doc_title": file.split(".")[0], "chunk_num": i}))
 
     embeddings = HuggingFaceEmbeddings()
 
@@ -34,15 +37,15 @@ def init_LLMchain():
 
     from langchain_community.llms.octoai_endpoint import OctoAIEndpoint
     llm = OctoAIEndpoint(
-            model="meta-llama-3-8b-instruct",
-            max_tokens=1024,
-            presence_penalty=0,
-            temperature=0.1,
-            top_p=0.9,
-        )
+        model="meta-llama-3-8b-instruct",
+        max_tokens=1024,
+        presence_penalty=0,
+        temperature=0.1,
+        top_p=0.9,
+    )
 
     from langchain.prompts import ChatPromptTemplate
-    template="""You are a chat filter system for an online game. Respond with 'toxic' if the prompt is toxic/rude and 'not toxic' if the prompt is not toxic/rude.
+    template = """You are a chat filter system for an online game. Respond with 'toxic' if the prompt is toxic/rude and 'not toxic' if the prompt is not toxic/rude.
     Question: {question}
     Context: {context}
     Answer:"""
@@ -53,14 +56,15 @@ def init_LLMchain():
     from langchain_core.runnables import RunnablePassthrough
     from langchain_core.output_parsers import StrOutputParser
     chain = (
-        {"context": retriever, "question": RunnablePassthrough()}
-        | prompt
-        | llm
-        | StrOutputParser()
+            {"context": retriever, "question": RunnablePassthrough()}
+            | prompt
+            | llm
+            | StrOutputParser()
     )
 
 
 def LLM_moderate(msg):
+    global chain  # Access the global variable `chain`
     if chain is None:
         return "Moderation is not yet ready, please wait."
     result = chain.invoke(msg)
