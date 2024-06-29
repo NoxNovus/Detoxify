@@ -49,7 +49,7 @@ retriever = vector_store.as_retriever()
 
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-self.chain = (
+chain = (
     {"context": retriever, "question": RunnablePassthrough()}
     | prompt
     | llm
@@ -57,8 +57,8 @@ self.chain = (
 )
 
 
-def LLM_moderate(self, msg):
-    if self.chain is None:
+def LLM_moderate(msg):
+    if chain is None:
         return("Moderator is not initialized, please wait!")
-    result = self.chain.invoke(msg)
+    result = chain.invoke(msg)
     return result
