@@ -16,13 +16,16 @@
             height: 100vh;
         }
         .chat-container {
-            width: 60%;
+            width: 80%; /* Adjust the width as needed */
             max-width: 800px;
             margin: 20px;
             padding: 20px;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             text-align: center;
@@ -37,13 +40,16 @@
             background-color: #f9f9f9;
             margin-bottom: 10px;
             font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box; /* Ensure padding is included in width calculation */
         }
         #text {
-            width: calc(100% - 20px);
+            width: 100%;
+            max-width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             margin-bottom: 10px;
+            box-sizing: border-box;
         }
         .btn {
             display: inline-block;
@@ -60,12 +66,15 @@
             background-color: #0056b3;
         }
         #users {
+            width: 100%;
+            max-width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #f9f9f9;
             margin-bottom: 10px;
             font-family: Arial, sans-serif;
+            box-sizing: border-box;
         }
     </style>
     <script type="text/javascript">
@@ -104,6 +113,10 @@
                 });
             });
             socket.on('username_taken', function(data) {
+                alert(data.msg);
+                window.location.href = "{{ url_for('main.index') }}";
+            });
+            socket.on('username_invalid', function(data) {
                 alert(data.msg);
                 window.location.href = "{{ url_for('main.index') }}";
             });

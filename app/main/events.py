@@ -3,12 +3,17 @@ from flask_socketio import emit, join_room, leave_room
 from app.moderator.simple_filter import censor_target_words, DEFAULT_SWEAR_WORDS
 from .. import socketio
 
+MAX_USERNAME_LENGTH = 32
 users = {}  # Dictionary to track users in rooms
 
 @socketio.on('joined', namespace='/chat')
 def joined(message):
     room = session.get('room')
     user = session.get('name')
+
+    if len(user) > MAX_USERNAME_LENGTH:
+        emit('username_invalid', {'msg': f'Username cannot be longer than {MAX_USERNAME_LENGTH} characters.'})
+        return
 
     if room not in users:
         users[room] = []
