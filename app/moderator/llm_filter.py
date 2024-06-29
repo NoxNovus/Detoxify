@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-OCTOAI_API_TOKEN = os.environ["OCTOAI_API_TOKEN"]
+OCTOAI_API_TOKEN = os.getenv("OCTOAI_API_TOKEN")
 
 chain = None  # Set to None by default until init
 
@@ -11,10 +11,17 @@ chain = None  # Set to None by default until init
 def init_LLMchain():
     global chain  # Access the global variable `chain`
 
+    if chain is not None:
+        return  # If chain is already initialized, return
+
     from langchain.text_splitter import CharacterTextSplitter
     from langchain.schema import Document
     from langchain_community.embeddings import HuggingFaceEmbeddings
     from langchain.vectorstores import FAISS
+    from langchain_community.llms.octoai_endpoint import OctoAIEndpoint
+    from langchain.prompts import ChatPromptTemplate
+    from langchain_core.runnables import RunnablePassthrough
+    from langchain_core.output_parsers import StrOutputParser
 
     files = os.listdir("game_data")
     file_texts = []
@@ -36,7 +43,6 @@ def init_LLMchain():
         embedding=embeddings
     )
 
-    from langchain_community.llms.octoai_endpoint import OctoAIEndpoint
     llm = OctoAIEndpoint(
         model="meta-llama-3-8b-instruct",
         max_tokens=1024,
@@ -45,7 +51,6 @@ def init_LLMchain():
         top_p=0.9,
     )
 
-    from langchain.prompts import ChatPromptTemplate
     template = """You are a chat filter system for an online game. Respond with 'toxic' if the prompt is toxic/rude and 'not toxic' if the prompt is not toxic/rude.
     Question: {question}
     Context: {context}
@@ -54,18 +59,17 @@ def init_LLMchain():
 
     retriever = vector_store.as_retriever()
 
-    from langchain_core.runnables import RunnablePassthrough
-    from langchain_core.output_parsers import StrOutputParser
     chain = (
-            {"context": retriever, "question": RunnablePassthrough()}
-            | prompt
-            | llm
-            | StrOutputParser()
+        {"context": retriever, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
     )
 
 
 def LLM_moderate(msg):
     global chain  # Access the global variable `chain`
+
     if chain is None:
         return "Moderation is not yet ready, please wait."
 
