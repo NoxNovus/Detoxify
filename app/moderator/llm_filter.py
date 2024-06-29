@@ -44,7 +44,7 @@ def init_LLMchain():
     )
 
     llm = OctoAIEndpoint(
-        model="meta-llama-3-8b-instruct",
+        model="meta-llama-3-70b-instruct",
         max_tokens=1024,
         presence_penalty=0,
         temperature=0.1,
