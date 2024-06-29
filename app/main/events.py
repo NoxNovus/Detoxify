@@ -1,8 +1,11 @@
 from flask import session
 from flask_socketio import emit, join_room, leave_room
+from app.moderator.llm_filter import LLMChain
 from app.moderator.simple_filter import censor_target_words, DEFAULT_SWEAR_WORDS
 from .. import socketio
 from main import llm_chain
+
+llm_chain = LLMChain()
 
 MAX_USERNAME_LENGTH = 32
 users = {}  # Dictionary to track users in rooms
