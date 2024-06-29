@@ -32,7 +32,7 @@ def joined(message):
 def text(message):
     room = session.get('room')
     raw_msg = message['msg']
-    moderated_msg = LLM_moderate('msg')
+    moderated_msg = LLM_moderate(raw_msg)
     emit('message', {'user': session.get('name'), 'msg': moderated_msg}, room=room)
 
 @socketio.on('left', namespace='/chat')
